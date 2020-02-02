@@ -14,6 +14,8 @@ spring:
       hibernate:
         #      show_sql: true
         format_sql: true
+#  main:
+#    web-application-type: none
 
 logging:
   level:
@@ -25,3 +27,20 @@ logging:
     springframework:
       data:
         repository: DEBUG
+
+company:
+  name: "EXBI"
+  address: "서울"
+  tel-number: "02-1234-1234"
+  email: "master@exbi.co.kr"
+
+#server:
+#  compression:
+#    enabled: true
+server:
+  port: 8080
+  ssl:
+    key-store: "keystore.p12"
+    key-store-type: "PKCS12"
+    key-alias: "spring"
+    key-store-password: "123123"
