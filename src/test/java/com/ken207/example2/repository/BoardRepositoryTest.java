@@ -1,6 +1,7 @@
 package com.ken207.example2.repository;
 
 import com.ken207.example2.domain.Board;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -21,6 +23,21 @@ public class BoardRepositoryTest {
 
     @Autowired
     BoardRepository boardRepository;
+
+    private Long boardId;
+
+    @Before
+    public void setUp() {
+        Board requestData = Board.builder()
+                .author("박규태")
+                .content("내용")
+                .createdTime(LocalDateTime.now())
+                .subject("제목")
+                .build();
+
+        Board newBoard = boardRepository.save(requestData);
+        boardId = newBoard.getId();
+    }
 
     @Test
     public void Board등록정상테스트() {
@@ -66,4 +83,26 @@ public class BoardRepositoryTest {
         assertEquals(requestData, newBoard);
         assertEquals(selectBoard, newBoard);
     }
+
+    @Test
+    @Rollback(false)
+    public void Board동일Entity중복등록테스트() {
+        //given
+        Board requestData = Board.builder()
+                .author("박규태1")
+                .content("중복등록테스트")
+                .createdTime(LocalDateTime.now())
+                .subject("제목")
+                .build();
+
+        Board newBoard = boardRepository.save(requestData);
+        Board newBoard2 = boardRepository.save(requestData);
+
+        //when
+        List<Board> all = boardRepository.findAll();
+
+        //then
+        assertEquals(all.size(), 2);
+    }
+
 }
