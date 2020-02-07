@@ -42,6 +42,7 @@ public class BoardRepositoryTest {
     @Test
     public void Board등록정상테스트() {
         //given
+
         Board requestData = Board.builder()
                 .author("박규태")
                 .content("내용")
@@ -74,6 +75,7 @@ public class BoardRepositoryTest {
 
         //when
         newBoard.setAuthor("홍석춘");
+
         Board selectBoard = boardRepository.findById(newBoard.getId()).get();
 
         //then
