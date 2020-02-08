@@ -44,4 +44,3 @@ server:
     key-store-type: "PKCS12"
     key-alias: "spring"
     key-store-password: "123123"
-    
