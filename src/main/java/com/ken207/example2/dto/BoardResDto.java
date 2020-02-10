@@ -17,5 +17,4 @@ public class BoardResDto {
     private LocalDateTime createdTime;
     private LocalDateTime modifiedDate;
     private int hitCount;
-    private boolean delYn;
 }
