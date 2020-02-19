@@ -39,6 +39,7 @@ public class BoardService {
         return board;
     }
 
+    @Transactional
     public Board readBoard(Long boardId) {
         Board board = getBoard(boardId);
         board.read();
@@ -46,7 +47,8 @@ public class BoardService {
         return board;
     }
 
-    public Board getBoard(Long boardId) {
+
+    private Board getBoard(Long boardId) {
         Optional<Board> optionalBoard = boardRepository.findById(boardId);
 
         if ( !optionalBoard.isPresent() ) {
@@ -56,8 +58,8 @@ public class BoardService {
         return optionalBoard.get();
     }
 
-    public Comments writeComment(CommentReqDto commentReqDto) {
-        Board board = this.getBoard(commentReqDto.getBoardId());
+    public Comments writeComment(Long boardId, CommentReqDto commentReqDto) {
+        Board board = this.getBoard(boardId);
         Comments comment = board.writeComment(commentReqDto.getContent());
 
         return comment;

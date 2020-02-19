@@ -23,11 +23,6 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello world";
-    }
-
     @PostMapping("/hello")
     public ResponseEntity postBoard(@RequestBody BoardReqDto boardReqDto) throws URISyntaxException {
 
@@ -61,7 +56,7 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     public BoardResDto readBoard(@PathVariable Long boardId) {
-        Board board = boardService.getBoard(boardId);
+        Board board = boardService.readBoard(boardId);
 
         return BoardResDto.builder()
                 .id(board.getId())
@@ -76,7 +71,7 @@ public class BoardController {
 
     @PostMapping("/{boardId}")
     public Long writeComment(@PathVariable Long boardId, CommentReqDto commentReqDto) {
-        Comments comment = boardService.writeComment(commentReqDto);
+        Comments comment = boardService.writeComment(boardId, commentReqDto);
         return comment.getId();
     }
 }
