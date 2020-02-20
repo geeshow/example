@@ -48,7 +48,7 @@ public class BoardService {
     }
 
 
-    private Board getBoard(Long boardId) {
+    public Board getBoard(Long boardId) {
         Optional<Board> optionalBoard = boardRepository.findById(boardId);
 
         if ( !optionalBoard.isPresent() ) {
