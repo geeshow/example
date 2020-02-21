@@ -23,7 +23,7 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
-    @PostMapping("/hello")
+    @PostMapping
     public ResponseEntity postBoard(@RequestBody BoardReqDto boardReqDto) throws URISyntaxException {
 
         Long boardId = boardService.postBoard(boardReqDto);
@@ -40,7 +40,7 @@ public class BoardController {
                 .build();
 
         //URI uri = new URI("/hello/1");
-        URI redirUri = linkTo(BoardController.class).slash("hello").slash("1").toUri();
+        URI redirUri = linkTo(BoardController.class).slash("hello").slash(board.getId()).toUri();
         return ResponseEntity.created(redirUri).body(result);
     }
 

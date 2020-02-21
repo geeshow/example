@@ -26,6 +26,9 @@ public class Comments {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @Version
+    private int version;
+
     /*
      * 연관관계 정의 메소드
      */

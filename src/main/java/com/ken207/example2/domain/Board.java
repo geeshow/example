@@ -2,6 +2,7 @@ package com.ken207.example2.domain;
 
 import com.ken207.example2.exception.BizRuntimeException;
 import lombok.*;
+import org.springframework.data.annotation.Version;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,6 +34,9 @@ public class Board {
 
     @OneToMany(mappedBy = "board")
     private List<Comments> commentsList = new ArrayList();
+
+    @Version
+    private int version;
 
     public static Board postBoard(String author, String subject, String content, String password) {
         Board newBoard = Board.builder()
