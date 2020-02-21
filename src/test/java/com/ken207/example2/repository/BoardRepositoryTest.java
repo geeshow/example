@@ -66,6 +66,7 @@ public class BoardRepositoryTest {
         //given
         Board requestData = Board.builder()
                 .author("박규태")
+
                 .content("내용")
                 .createdTime(LocalDateTime.now())
                 .subject("제목")
