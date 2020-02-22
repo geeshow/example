@@ -2,6 +2,7 @@ package com.ken207.example2.service;
 
 import com.ken207.example2.domain.Board;
 import com.ken207.example2.dto.BoardReqDto;
+import com.ken207.example2.repository.BoardRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,4 +38,5 @@ public class BoardServiceTest {
         //then
         Assert.assertEquals("제목",board.getSubject());
     }
+
 }

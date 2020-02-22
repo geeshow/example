@@ -35,4 +35,12 @@ public class Comments {
     public void setBoard(Board board) {
         this.board = board;
     }
+
+    public static Comments writeComment(String name, String content) {
+        return Comments.builder()
+                .name(name)
+                .content(content)
+                .createdTime(LocalDateTime.now())
+                .build();
+    }
 }

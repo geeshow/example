@@ -1,6 +1,9 @@
 package com.ken207.example2.repository;
 
 import com.ken207.example2.domain.Board;
+import com.ken207.example2.domain.Comments;
+import com.ken207.example2.dto.BoardReqDto;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,6 +27,9 @@ public class BoardRepositoryTest {
 
     @Autowired
     BoardRepository boardRepository;
+
+    @Autowired
+    CommentsRepository commentsRepository;
 
     private Long boardId;
 
@@ -108,4 +115,51 @@ public class BoardRepositoryTest {
         assertEquals(all.size(), 2);
     }
 
+    @Test
+    public void writeCommentOkExample() {
+        //given
+        Board reqBoard = Board.postBoard("박규태1", "제목", "중복등록테스트", "1234");
+        Comments comment = Comments.writeComment("원선재", "안녕하세요");
+        comment.setBoard(reqBoard);
+        Board newBoard = boardRepository.save(reqBoard);
+
+        //when
+        Board board = boardRepository.findById(newBoard.getId()).get();
+
+        //then
+        assertEquals(1, board.getCommentsList().size());
+        assertEquals("원선재", board.getCommentsList().get(0).getName());
+        assertEquals(board.getSubject(), board.getCommentsList().get(0).getBoard().getSubject());
+    }
+
+    @Test
+    public void writeCommentExampleStep1() {
+        //given
+        Board reqBoard = Board.postBoard("박규태1", "제목", "중복등록테스트", "1234");
+        Comments comment = Comments.writeComment("원선재", "안녕하세요");
+
+        //when
+        Board newBoard = boardRepository.save(reqBoard);
+        Comments newComment = commentsRepository.save(comment);
+
+        //then
+        assertEquals(0, newBoard.getCommentsList().size());
+        assertNull(newComment.getBoard());
+    }
+
+    @Test
+    public void writeCommentExampleStep2() {
+        //given
+        Board reqBoard = Board.postBoard("박규태1", "제목", "중복등록테스트", "1234");
+        Comments comment = Comments.writeComment("원선재", "안녕하세요");
+
+        //when
+        reqBoard.getCommentsList().add(comment);
+        Board newBoard = boardRepository.save(reqBoard);
+        Comments newComment = commentsRepository.save(comment);
+
+        //then
+        assertEquals(0, newBoard.getCommentsList().size());
+        assertNull(newComment.getBoard());
+    }
 }
