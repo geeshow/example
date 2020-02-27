@@ -4,7 +4,9 @@ import com.ken207.example2.domain.Board;
 import com.ken207.example2.domain.Comments;
 import com.ken207.example2.dto.BoardReqDto;
 import com.ken207.example2.dto.BoardResDto;
+import com.ken207.example2.dto.BoardSearchDto;
 import com.ken207.example2.dto.CommentReqDto;
+import com.ken207.example2.repository.BoardRepository;
 import com.ken207.example2.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
@@ -22,6 +26,9 @@ public class BoardController {
 
     @Autowired
     BoardService boardService;
+
+    @Autowired
+    BoardRepository boardRepository;
 
     @PostMapping
     public ResponseEntity postBoard(@RequestBody BoardReqDto boardReqDto) throws URISyntaxException {
@@ -73,5 +80,21 @@ public class BoardController {
     public Long writeComment(@PathVariable Long boardId, CommentReqDto commentReqDto) {
         Comments comment = boardService.writeComment(boardId, commentReqDto);
         return comment.getId();
+    }
+
+    @GetMapping("/search")
+    public List<BoardResDto> search(@ModelAttribute BoardSearchDto boardSearchDto) {
+        List<Board> boardList = boardRepository.findByAuthorLike(boardSearchDto.getSearchStr());
+
+        return boardList.stream().map(board -> BoardResDto.builder()
+                    .id(board.getId())
+                    .author(board.getAuthor())
+                    .content(board.getContent())
+                    .createdTime(board.getCreatedTime())
+                    .hitCount(board.getHitCount())
+                    .modifiedDate(board.getModifiedDate())
+                    .subject(board.getSubject())
+                    .build())
+                .collect(Collectors.toList());
     }
 }
