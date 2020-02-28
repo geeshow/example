@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByAuthorLike(String searchStr);
+    List<Board> findBySubjectLike(String searchStr);
+    List<Board> findByContentLike(String searchStr);
+    List<Board> findByTitleLike(String searchStr);
 }

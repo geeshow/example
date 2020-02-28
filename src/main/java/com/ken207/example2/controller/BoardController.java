@@ -6,6 +6,7 @@ import com.ken207.example2.dto.BoardReqDto;
 import com.ken207.example2.dto.BoardResDto;
 import com.ken207.example2.dto.BoardSearchDto;
 import com.ken207.example2.dto.CommentReqDto;
+import com.ken207.example2.enums.SearchType;
 import com.ken207.example2.repository.BoardRepository;
 import com.ken207.example2.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,20 @@ public class BoardController {
 
     @GetMapping("/search")
     public List<BoardResDto> search(@ModelAttribute BoardSearchDto boardSearchDto) {
-        List<Board> boardList = boardRepository.findByAuthorLike(boardSearchDto.getSearchStr());
+        List<Board> boardList = null;
+
+        switch ( boardSearchDto.getSearchType() ) {
+            case AUTHOR :
+                boardList = boardRepository.findByAuthorLike(boardSearchDto.getSearchStr());
+                break;
+            case TITLE :
+                boardList = boardRepository.findByTitleLike(boardSearchDto.getSearchStr());
+                break;
+            case CONTENT :
+                boardList = boardRepository.findByContentLike(boardSearchDto.getSearchStr());
+                break;
+        }
+
 
         return boardList.stream().map(board -> BoardResDto.builder()
                     .id(board.getId())
